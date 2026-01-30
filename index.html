@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A Special Delivery 💌</title>
+    <style>
+        /* Add some fun CSS here for the pink/red theme */
+        body { font-family: 'Comic Sans MS', cursive; text-align: center; background: #fff0f3; color: #d00000; padding: 50px; }
+        .page { display: none; }
+        .active { display: block; }
+        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border-radius: 20px; border: none; background: #ff4d6d; color: white; margin: 10px; }
+        .envelope { font-size: 100px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="page1" class="page active">
+        <h1>You have a new present! 🎁</h1>
+        <div class="envelope" onclick="nextPage(2)">✉️</div>
+        <p>Tap to open your gift...</p>
+    </div>
+
+    <div id="page2" class="page">
+        <h2>Do you like the person who sent this?</h2>
+        <button onclick="nextPage(3)">Yes!</button>
+        <button onclick="nextPage(3)">HELL YES!</button>
+    </div>
+
+    <div id="page3" class="page">
+        <h2>Wow... okay! 🥰</h2>
+        <p>A very, very amazing person has a very important question...</p>
+        <p>Do you want to know what it is? . . .</p>
+        <button onclick="nextPage(4)">TELL ME!</button>
+    </div>
+
+    <div id="page4" class="page">
+        <h1>💖 Will you be my Valentine? 💖</h1>
+        <button onclick="alert('Yay! Best day ever! ❤️')">YES!</button>
+        <button onclick="alert('I knew it! ❤️')">100x YES!</button>
+    </div>
+
+    <script>
+        function nextPage(pageNumber) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show the next page
+            document.getElementById('page' + pageNumber).classList.add('active');
+        }
+    </script>
+</body>
+</html>
