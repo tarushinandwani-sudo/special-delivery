@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Special Delivery 💌</title>
     <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
         :root {
@@ -14,99 +15,90 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: var(--bg-soft);
-            font-family: 'Gaegu', cursive;
-            overflow: hidden;
-            text-align: center;
+            margin: 0; padding: 0; display: flex; justify-content: center;
+            align-items: center; height: 100vh; background-color: var(--bg-soft);
+            font-family: 'Gaegu', cursive; overflow: hidden; text-align: center;
         }
 
-        /* Floating Hearts Animation */
-        .heart {
-            position: absolute;
-            color: var(--pink);
-            font-size: 20px;
-            animation: float 5s linear infinite;
-            opacity: 0.6;
-            z-index: -1;
+        /* Floating Hearts Background */
+        .heart-float { position: absolute; color: var(--pink); font-size: 20px; animation: float 5s linear infinite; opacity: 0.6; z-index: -1; }
+        @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
+
+        /* The Big Pulsing Heart */
+        .big-heart { font-size: 150px; animation: pulse 1.5s infinite; margin: 20px; display: block; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        /* Hamster Branding */
+        #hamster-container {
+            position: fixed; bottom: 20px; right: 20px; width: 150px;
+            z-index: 100; display: flex; flex-direction: column; align-items: center;
+        }
+        #hamster-img { width: 100px; height: auto; transform: scaleX(-1); }
+        .bubble {
+            background: white; border: 2px solid var(--dark-pink);
+            padding: 10px; border-radius: 15px; font-size: 0.9rem;
+            margin-bottom: 10px; position: relative; font-family: 'Quicksand', sans-serif;
+        }
+        .bubble::after {
+            content: ''; position: absolute; bottom: -10px; right: 20px;
+            border-width: 10px 10px 0; border-style: solid; border-color: white transparent;
         }
 
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
-        .container {
-            z-index: 10;
-            max-width: 400px;
-        }
-
+        .container { z-index: 10; max-width: 450px; padding: 20px; }
         .page { display: none; }
         .active { display: block; animation: fadeIn 0.8s; }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         h1 { font-size: 2.5rem; color: var(--dark-pink); }
         p { font-family: 'Quicksand', sans-serif; font-size: 1.2rem; color: #555; }
 
-        /* Interactive Envelope */
-        .envelope-wrapper {
-            cursor: pointer;
-            transition: transform 0.3s;
-            font-size: 100px;
-        }
+        .envelope-wrapper { cursor: pointer; transition: 0.3s; font-size: 100px; }
         .envelope-wrapper:hover { transform: scale(1.1) rotate(5deg); }
 
-        /* Buttons */
-        .btn-group { margin-top: 20px; position: relative; height: 100px; }
+        .btn-group { margin-top: 20px; position: relative; height: 120px; }
         button {
-            padding: 12px 25px;
-            font-size: 1.2rem;
-            font-family: 'Gaegu', cursive;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 50px;
-            border: none;
-            background: var(--dark-pink);
-            color: white;
+            padding: 12px 25px; font-size: 1.2rem; font-family: 'Gaegu', cursive;
+            font-weight: bold; cursor: pointer; border-radius: 50px; border: none;
+            background: var(--dark-pink); color: white; margin: 10px; transition: 0.3s;
             box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
-            margin: 10px;
-            transition: 0.3s;
         }
-
         button:hover { transform: scale(1.1); background: #ff758f; }
-
-        #no-btn {
-            position: absolute;
-            background: #999;
-        }
+        #no-btn { position: absolute; background: #999; }
     </style>
 </head>
 <body>
 
     <div id="hearts-container"></div>
 
+    <div id="hamster-container">
+        <div class="bubble" id="hamster-talk">Hi! I have a delivery for you!</div>
+        <img id="hamster-img" src="hamster.png" alt="Coding Hamster">
+    </div>
+
     <div class="container">
         <div id="page1" class="page active">
             <h1>A gift for you!</h1>
-            <div class="envelope-wrapper" onclick="nextPage(2)">💌</div>
+            <div class="envelope-wrapper" onclick="handleNext(2, 'Ooh! What is inside?')">💌</div>
             <p>Tap the letter to open</p>
         </div>
 
         <div id="page2" class="page">
             <h1>Wait... quick question!</h1>
             <p>Do you think the person who sent this is cute?</p>
-            <button onclick="nextPage(3)">Yes, obviously!</button>
-            <button onclick="nextPage(3)">HELL YES!</button>
+            <button onclick="handleNext(3, 'I agree! They are super cute.')">Yes, obviously!</button>
+            <button onclick="handleNext(3, 'So true!! ✨')">HELL YES!</button>
         </div>
 
         <div id="page3" class="page">
-            <h1>💖 Will you be my Valentine? 💖</h1>
+            <h1>Wait... there's more!</h1>
+            <p>This very cute person has a very, very important question to ask you.</p>
+            <p>Would you like to know what it is?</p>
+            <button onclick="handleNext(4, 'Get ready...')">YES, tell me!</button>
+        </div>
+
+        <div id="page4" class="page">
+            <span class="big-heart">❤️</span>
+            <h1>Will you be my Valentine?</h1>
             <p>Choose wisely...</p>
             <div class="btn-group">
                 <button onclick="celebrate()">YES!</button>
@@ -114,9 +106,9 @@
             </div>
         </div>
 
-        <div id="page4" class="page">
+        <div id="page5" class="page">
             <h1>YAY! ❤️✨</h1>
-            <p>I knew you'd say yes! I'll text you the details! 🥰</p>
+            <p>I knew you'd say yes! Check your texts for the plan! 🥰</p>
             <div style="font-size: 50px;">🎉🍭🍓</div>
         </div>
     </div>
@@ -125,7 +117,7 @@
         // 1. Create Floating Hearts
         function createHeart() {
             const heart = document.createElement('div');
-            heart.classList.add('heart');
+            heart.classList.add('heart-float');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
@@ -134,10 +126,11 @@
         }
         setInterval(createHeart, 300);
 
-        // 2. Navigation
-        function nextPage(num) {
+        // 2. Navigation & Hamster Speech
+        function handleNext(pageNum, hamsterText) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page' + num).classList.add('active');
+            document.getElementById('page' + pageNum).classList.add('active');
+            document.getElementById('hamster-talk').innerText = hamsterText;
         }
 
         // 3. The Dodging No Button
@@ -147,11 +140,18 @@
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
+            document.getElementById('hamster-talk').innerText = "Hey! You can't click that!";
         });
 
+        // 4. Final Celebration
         function celebrate() {
-            nextPage(4);
-            // You could add a confetti trigger here!
+            handleNext(5, "MISSION ACCOMPLISHED! 🐹💖");
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ff85a1', '#ffb3c1']
+            });
         }
     </script>
 </body>
