@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary Baby ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ff85a1;
+            --dark-pink: #ff4d6d;
+            --bg-soft: #fff0f3;
+        }
+
+        body {
+            margin: 0; padding: 0; display: flex; justify-content: center;
+            align-items: center; min-height: 100vh; background-color: var(--bg-soft);
+            font-family: 'Quicksand', sans-serif; overflow-x: hidden; text-align: center;
+        }
+
+        /* Floating Hearts Background */
+        .heart-float { position: absolute; color: var(--pink); font-size: 20px; animation: float 5s linear infinite; opacity: 0.6; z-index: -1; }
+        @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
+
+        .container { 
+            z-index: 10; 
+            max-width: 600px; 
+            padding: 40px; 
+            background: rgba(255, 255, 255, 0.6); 
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.1);
+            margin: 20px;
+        }
+
+        h1 { 
+            font-family: 'Gaegu', cursive; 
+            font-size: 3rem; 
+            color: var(--dark-pink); 
+            margin-bottom: 20px;
+        }
+
+        #typewriter-text {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #444;
+            white-space: pre-wrap; /* Keeps the spacing of your message */
+            display: inline-block;
+            text-align: left;
+        }
+
+        /* The cursor effect */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: var(--dark-pink);
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .big-heart { font-size: 50px; display: block; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div id="hearts-container"></div>
+
+    <div class="container">
+        <h1 id="header-text"></h1>
+        <div id="typewriter-text"></div><span class="cursor">|</span>
+        <span class="big-heart">💋❤️</span>
+    </div>
+
+    <script>
+        // 1. Floating Hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-float');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.getElementById('hearts-container').appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // 2. Typewriter Effect
+        const headerStr = "Happy one year to our first kiss baby, love you so much";
+        const bodyStr = "Happy 1 year to our first kiss. From the very first time we saw each other when we barely even spoke, to Yash’s birthday when we somehow ended up talking for hours, I don’t think either of us knew where that would lead.\n\nThose endless conversations, the way you listened to me for hours without ever making me feel like too much, truly made my heart melt.\n\nI think about the nights we slept on the same bed, nervous to even touch each other, and how that slowly turned into our first kiss. Then came our first party together, the comfort of being by your side, and all those endless kissing sessions after that.\n\nFrom my first ever plant that you gifted me last Valentine’s Day to every little moment in between, every memory with you has been worthwhile. I know we fight a lot, but that’s okay, it’s all part of our journey and how we grow together.\n\nYou are my favourite hooman, and I love you. I always will.\n\nMy pookie 🤍 ily and ilysmm.";
+
+        const headerEl = document.getElementById('header-text');
+        const bodyEl = document.getElementById('typewriter-text');
+
+        let h = 0;
+        let b = 0;
+
+        function typeHeader() {
+            if (h < headerStr.length) {
+                headerEl.textContent += headerStr.charAt(h);
+                h++;
+                setTimeout(typeHeader, 70);
+            } else {
+                setTimeout(typeBody, 1000); // Wait a second before starting the long letter
+            }
+        }
+
+        function typeBody() {
+            if (b < bodyStr.length) {
+                bodyEl.textContent += bodyStr.charAt(b);
+                b++;
+                // Slower typing for the emotional letter
+                setTimeout(typeBody, 45); 
+            }
+        }
+
+        // Start the effect
+        typeHeader();
+    </script>
+</body>
+</html>
